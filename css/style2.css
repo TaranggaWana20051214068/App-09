@@ -1,0 +1,21 @@
+.logo-compact img {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: contain;
+  margin-top: -15px;
+}
+.logo-abbr img {
+  width: 200px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  margin-left: -10px;
+}
+
+.header-left .clearfix li h2 {
+  margin-top: 8%;
+}
+@media only screen and (max-width: 600px) {
+  .header-left .clearfix li h2 {
+    margin-top: 8%;
+  }
+}
