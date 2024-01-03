@@ -4,6 +4,7 @@
 <?php
 session_start();
 include('include/head.php');
+include('include/functions.php');
 
 
 ?>
@@ -69,15 +70,36 @@ include('include/head.php');
               </script>';
                 unset($_SESSION['success_message']); // Hapus pesan agar tidak ditampilkan lagi
             }
-
-            if (isset($_SESSION['judul'])) {
-                unset($_SESSION['judul']);
-                $_SESSION['judul'] = 'Halaman Utama';
-            } else {
-                $_SESSION['judul'] = 'Halaman Utama';
+            if (isset($_SESSION['hapus'])) {
+                echo '<div id="hapus" class="alert alert-info">' . $_SESSION['hapus'] . '</div>';
+                echo '<script>
+                setTimeout(function() {
+                    var successMessage = document.getElementById("hapus");
+                    successMessage.style.display = "none";
+                }, 5000); // 3000 milidetik atau 3 detik
+                </script>';
+                unset($_SESSION['hapus']);
             }
-            $judul = $_SESSION['judul'];
+            if (isset($_REQUEST['delet'])) {
+                $id = $_POST['id'];
 
+                $sql = mysqli_query($conn, "DELETE a, b FROM tbl_surat a LEFT JOIN tbl_barang b ON a.id = b.id_surat WHERE a.id = '$id'");
+
+                if ($sql === false) {
+                    echo '<div class="alert alert-warning">Gagal Menghapus Data!</div>';
+                    // Log pesan kesalahan untuk referensi internal jika diperlukan
+                    error_log("Gagal menghapus data: " . mysqli_error($conn));
+                } else {
+                    echo '<div class="alert alert-info">Data berhasil dihapus!</div>';
+                    $_SESSION['hapus'] = "Data berhasil diahapus";
+                    ?>
+                    <script>window.location.href = "index.php";</script>
+                    <?php
+                    exit(); // Opsional: Menghentikan eksekusi script setelah menampilkan pesan sukses
+                }
+            }
+
+            $judul = "Halaman Utama";
             $actArray = [
                 'add' => 'tambah-surat.php',
                 'edit' => 'edit-surat.php',
@@ -123,7 +145,8 @@ include('include/head.php');
                                     <h4 class="card-title">Data Table <button type="button"
                                             onclick="window.location.href='?page=add'" class="btn mb-1 btn-primary">Tambah
                                             Data <span class="btn-icon-right"><i class="fa fa-plus color-info"></i></span>
-                                        </button></h4>
+                                        </button>
+                                    </h4>
 
                                     <div class="table-responsive">
                                         <table
@@ -194,8 +217,9 @@ include('include/head.php');
                                                             </td>
                                                             <td>
                                                                 <button
-                                                                    onclick="window.location.href='/surat.php?id=<?= $id_surat ?>'"
-                                                                    class="btn btn-primary">Cetak Invoice</button>
+                                                                    onclick="window.open('/surat.php?id=<?= $id_surat ?>', '_blank')"
+                                                                    class="btn mb-1 btn-primary btn-sm">Cetak
+                                                                    Invoice</button>
                                                             </td>
                                                             <td>
                                                                 <span>
@@ -207,9 +231,41 @@ include('include/head.php');
                                                                         data-placement="top" title="" data-original-title="Close">
                                                                         <i class="fa fa-close color-danger"></i>
                                                                     </a>
+                                                                    <button type="button" class="btn btn-sm btn-primary btn-danger"
+                                                                        data-toggle="modal"
+                                                                        data-target="#basicModal<?= $id_surat ?>">Hapus</button>
                                                                 </span>
                                                             </td>
                                                         </tr>
+                                                        <div class="bootstrap-modal">
+                                                            <!-- Button trigger modal -->
+                                                            <!-- Modal -->
+                                                            <div class="modal fade" id="basicModal<?= $id_surat ?>"
+                                                                style="display: none;" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">Hapus Data</h5>
+                                                                            <button type="button" class="close"
+                                                                                data-dismiss="modal"><span>×</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">Yakin ingin menghapus?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <form method="POST" action="#">
+                                                                                <input type="hidden" name="id"
+                                                                                    value="<?= $id_surat ?>">
+                                                                                <button type="button" class="btn btn-secondary"
+                                                                                    data-dismiss="modal">Close</button>
+                                                                                <button type="submit" name="delet"
+                                                                                    class="btn btn-primary btn-danger">Hapus</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <?php
                                                         $no++;
                                                     }
@@ -246,39 +302,7 @@ include('include/head.php');
         <!--**********************************
         Main wrapper end
     ***********************************-->
-
-        <!--**********************************
-        Scripts
-    ***********************************-->
-        <script>
-            var urlParams = new URLSearchParams(window.location.search);
-            var id = urlParams.get('id');
-        </script>
-        <script src="plugins/common/common.min.js"></script>
-        <script src="js/custom.min.js"></script>
-        <script src="js/settings.js"></script>
-        <script src="js/gleek.js"></script>
-        <script src="js/styleSwitcher.js"></script>
-        <script src="./plugins/moment/moment.js"></script>
-        <script src="./plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
-        <!-- Clock Plugin JavaScript -->
-        <script src="./plugins/clockpicker/dist/jquery-clockpicker.min.js"></script>
-        <!-- Color Picker Plugin JavaScript -->
-        <script src="./plugins/jquery-asColorPicker-master/libs/jquery-asColor.js"></script>
-        <script src="./plugins/jquery-asColorPicker-master/libs/jquery-asGradient.js"></script>
-        <script src="./plugins/jquery-asColorPicker-master/dist/jquery-asColorPicker.min.js"></script>
-        <!-- Date Picker Plugin JavaScript -->
-        <script src="./plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-        <!-- Date range Plugin JavaScript -->
-        <script src="./plugins/timepicker/bootstrap-timepicker.min.js"></script>
-        <script src="./plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
-
-        <script src="./js/plugins-init/form-pickers-init.js"></script>
-
-        <!-- Data table  javascript-->
-        <script src="./plugins/tables/js/jquery.dataTables.min.js"></script>
-        <script src="./plugins/tables/js/datatable/dataTables.bootstrap4.min.js"></script>
-        <script src="./plugins/tables/js/datatable-init/datatable-basic.min.js"></script>
+        <?php include('include/footer.php'); ?>
 </body>
 
 </html>

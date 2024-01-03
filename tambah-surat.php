@@ -2,7 +2,7 @@
 include("terbilang.php");
 
 $judul = 'Tambah Surat';
-if (isset($_POST["submit"])) {
+if (isset($_REQUEST["submit"])) {
     if (empty($_POST["tgl_surat"])) {
         echo '<div class="alert alert-primary alert-dismissible fade show">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
@@ -51,7 +51,7 @@ if (isset($_POST["submit"])) {
                 }
                 unset($_SESSION['tableDet']);
             }
-         }
+        }
         // Eksekusi query
         if ($sql == TRUE) {
             $_SESSION['success_message'] = "Berhasil";
@@ -84,6 +84,17 @@ if (isset($_POST["submit"])) {
 
 
     ?>
+    <style>
+        .table-responsive {
+            max-height: 13rem !important;
+        }
+
+        .wizard>.actions a,
+        .wizard>.actions a:hover,
+        .wizard>.actions a:active {
+            padding: 0.55em 2em !important;
+        }
+    </style>
     <div class="row page-titles mx-0">
         <div class="col p-md-0">
             <ol class="breadcrumb">
@@ -95,260 +106,255 @@ if (isset($_POST["submit"])) {
         </div>
     </div>
     <!-- row -->
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Tambah Barang =>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Tambah Barang</button>
-                        </h4>
-                        <div class="bootstrap-modal">
-                            <!-- Large modal -->
-                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Tambah Data Barang</h5>
-                                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                                </button>
-                                        </div>
-                                <div class="basic-form">
-                                    <form action="#" method="post">
-                                        <div class="form-group col-md-11 barang">
-                                            <label for="kode_barang">Kode Barang</label>
-                                            <input type="number" id="kode_barang" class="form-control input-rounded"
-                                            name="kode_barang" placeholder="Kode Barang">
-                                        </div>
-                                <div class="form-group col-md-11">
-                                    <label  for="nama_barang">Nama Barang</label>
-                                    <input type="text" id="nama_barang" class="form-control input-rounded"
-                                            name="nama_barang" placeholder="Nama Barang">
-                                </div>
-                                <div class="form-group col-md-11">
-                                    <label  for="qty">QTY </label>
-                                    <input type="number" id="qty" class="form-control input-rounded" name="qty"
-                                            placeholder="QTY">
-                                </div>
-                                <div class="form-group col-md-11">
-                                    <labe for="harga_sat">Harga Satuan</labe>
-                                    <input type="number" id="harga_sat" class="form-control input-rounded"
-                                            name="harga_sat" placeholder="Harga Satuan">
-                                </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button name="addBarang" onclick="hapusBarang(this)" class="btn btn-primary">Kirim<span
-                                            class="btn-icon-right"><i class="fa fa-check"></i></span></button>
-                                        </div>
-                                    </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                     <?php
-                                     if (isset($_REQUEST["addBarang"])) {
-                                        // Proses data yang dikirimkan
-                                        $kode_barang = $_POST['kode_barang'];
-                                        $nama_barang = $_POST['nama_barang'];
-                                        $qty = $_POST['qty'];
-                                        $harga_sat = $_POST['harga_sat'];
-                                    
-                                        if (!isset($_SESSION['tableDet'])) {
-                                            
-                                            $tableDet = array();
-                                        } else {
-                                            $tableDet = $_SESSION['tableDet'];
-                                        }
-                                    
-                                        
-                                        // Hapus data sebelumnya (jika ada)
-                                        unset($_SESSION['tableDet']);
-                                        $i = count($tableDet);
-                                        $tableDet[$i]['kode_barang'] = $kode_barang;
-                                        $tableDet[$i]['nama_barang'] = $nama_barang;
-                                        $tableDet[$i]['qty'] = $qty;
-                                        $tableDet[$i]['harga_sat'] = $harga_sat;
-                                        $tableDet[$i]['i'] = $i; // Menetapkan nilai 'i' dengan variabel $i
-                                        $_SESSION["tableDet"] = $tableDet;
-                                    }
-                                    ?>
-                           
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Data Barang</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <div class="basic-form">
+                    <form action="#" method="post">
+                        <div class="form-group col-md-11 barang">
+                            <label for="kode_barang">Kode Barang</label>
+                            <input type="number" id="kode_barang" class="form-control input-rounded" name="kode_barang"
+                                placeholder="Kode Barang">
                         </div>
-                        <div class="col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">Daftar Barang</h4>
-                                            <div class="table-responsive">
-                                                <table class="table header-border">
-                                                   
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">No</th>
-                                                            <th scope="col">Kode Barang</th>
-                                                            <th scope="col">Nama Barang</th>
-                                                            <th scope="col">QTY</th>
-                                                            <th scope="col">Harga Satuan</th>
-                                                            <th scope="col">Jumlah</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php
-                    if (isset($_SESSION["tableDet"])) {
-                        $tableDet = $_SESSION["tableDet"];
-                    $subtotal = 0;
-                    $angka = 0;
-                        foreach ($tableDet as $i => $v) {
-                            if ($tableDet[$i]["i"] != "del") {
-                            $no = $i + 1; // Menggunakan $no untuk nomor
-
-                            ?>
-                            <tr>
-                                <td><?= $no ?></td>
-                                <td><?= (is_array($tableDet[$i]['kode_barang']) ? 'Tidak Ada': $tableDet[$i]['kode_barang']) ?></td>
-                                <td><?= (is_array($tableDet[$i]['nama_barang']) ? 'Tidak Ada' : $tableDet[$i]['nama_barang']) ?></td>
-                                <td><?= (is_array($tableDet[$i]['qty']) ?  'Tidak Ada' : $tableDet[$i]['qty']) ?></td>
-                                <td><?= (is_array($tableDet[$i]['harga_sat']) ?  'Tidak Ada' : $tableDet[$i]['harga_sat']) ?></td>
-                                <td><?= (int)$tableDet[$i]['qty'] * (int)$tableDet[$i]['harga_sat'] ?></td>
-                                <td><?= '<a href="hapus-item-surat.php?id=' . $tableDet[$i]["i"] . '" type="button" class="btn mb-1 btn-danger">Remove <span class="btn-icon-right"><i class="fa fa-close"></i></span>
-                                                        </a>' ?></td>
-                            </tr>
-                            <?php
-                            // Tambahkan jumlah ke total jumlah
-                            $jumlah = (int)$tableDet[$i]['qty'] * (int)$tableDet[$i]['harga_sat'];
-                            $subtotal += $jumlah;
-                            $angka = $subtotal;
-                            }
-                            }
-                        } else {
-                            ?>
-                        <tr>
-                            <td oncl  colspan="6" style="text-align: center" class="col-lg-12 align-center">
-                            <p class="text-warning">Data Barang Masih Kosong <code>Isi Data barang</code></p>
-                            </td>
-                        </tr>
-                            <?php 
-                        }
-                        ?>
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                    </div>
+                        <div class="form-group col-md-11">
+                            <label for="nama_barang">Nama Barang</label>
+                            <input type="text" id="nama_barang" class="form-control input-rounded" name="nama_barang"
+                                placeholder="Nama Barang">
+                        </div>
+                        <div class="form-group col-md-11">
+                            <label for="qty">QTY </label>
+                            <input type="number" id="qty" class="form-control input-rounded" name="qty" placeholder="QTY">
+                        </div>
+                        <div class="form-group col-md-11">
+                            <labe for="harga_sat">Harga Satuan</labe>
+                            <input type="number" id="harga_sat" class="form-control input-rounded" name="harga_sat"
+                                placeholder="Harga Satuan">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" name="addBarang" class="btn btn-primary">Kirim<span
+                                    class="btn-icon-right"><i class="fa fa-check"></i></span></button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">FAKTUR</h4>
-                        <p class="text-muted m-b-15 f-s-12"><code>Transaksi</code></p>
-                        <div class="basic-form">
-                            <form action="#" method="post">
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="tampilan">Nomor-Surat <span
-                                            class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="number" class="form-control input-rounded" id="tampilan"
-                                            name="tampilan" placeholder="Nomor-Surat" value="<?= $bikin_kode ?>" readonly>
+        </div>
+        <?php
+        if (isset($_REQUEST["addBarang"])) {
+            // Proses data yang dikirimkan
+            $kode_barang = $_POST['kode_barang'];
+            $nama_barang = $_POST['nama_barang'];
+            $qty = $_POST['qty'];
+            $harga_sat = $_POST['harga_sat'];
+
+            if (!isset($_SESSION['tableDet'])) {
+                unset($_SESSION['tableDet']);
+                $tableDet = array();
+            } else {
+                $tableDet = $_SESSION['tableDet'];
+            }
+            $i = count($tableDet);
+            $tableDet[$i]['kode_barang'] = $kode_barang;
+            $tableDet[$i]['nama_barang'] = $nama_barang;
+            $tableDet[$i]['qty'] = $qty;
+            $tableDet[$i]['harga_sat'] = $harga_sat;
+            $tableDet[$i]['i'] = $i; // Menetapkan nilai 'i' dengan variabel $i
+            $_SESSION["tableDet"] = $tableDet;
+            ?>
+            <script>window.location.href = "?page=add"</script>
+            <?php
+            die();
+        }
+        ?>
+
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="#" method="POST" id="step-form-horizontal" class="step-form-horizontal">
+                    <div>
+                        <h4>Daftar Barang</h4>
+                        <section>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <!-- Large modal -->
+
+                                    <div class="table-responsive">
+                                        <table class="table header-border">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">No</th>
+                                                    <th scope="col">Kode Barang</th>
+                                                    <th scope="col">Nama Barang</th>
+                                                    <th scope="col">QTY</th>
+                                                    <th scope="col">Harga Satuan</th>
+                                                    <th scope="col">Jumlah</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $subtotal = 0;
+                                                $angka = 0;
+                                                if (isset($_SESSION["tableDet"])) {
+                                                    $tableDet = $_SESSION["tableDet"];
+                                                    foreach ($tableDet as $i => $v) {
+                                                        if ($tableDet[$i]["i"] != "del") {
+                                                            $no = $i + 1; // Menggunakan $no untuk nomor
+                                            
+                                                            ?>
+                                                            <tr>
+                                                                <td>
+                                                                    <?= $no ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= (is_array($tableDet[$i]['kode_barang']) ? 'Tidak Ada' : $tableDet[$i]['kode_barang']) ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= (is_array($tableDet[$i]['nama_barang']) ? 'Tidak Ada' : $tableDet[$i]['nama_barang']) ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= (is_array($tableDet[$i]['qty']) ? 'Tidak Ada' : $tableDet[$i]['qty']) ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= (is_array($tableDet[$i]['harga_sat']) ? 'Tidak Ada' : $tableDet[$i]['harga_sat']) ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= (int) $tableDet[$i]['qty'] * (int) $tableDet[$i]['harga_sat'] ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= '<a href="hapus-item-surat.php?id=' . $tableDet[$i]["i"] . '" type="button" class="btn mb-1 btn-xs btn-danger">Remove<span class="btn-icon-right"><i class="fa fa-close"></i></span>
+                                                        </a>' ?>
+                                                                </td>
+                                                            </tr>
+                                                            <?php
+                                                            // Tambahkan jumlah ke total jumlah
+                                                            $jumlah = (int) $tableDet[$i]['qty'] * (int) $tableDet[$i]['harga_sat'];
+                                                            $subtotal += $jumlah;
+                                                            $angka = $subtotal;
+                                                        }
+                                                    }
+                                                } else {
+                                                    ?>
+                                                    <tr>
+                                                        <td oncl colspan="6" style="text-align: center"
+                                                            class="col-lg-12 align-center">
+                                                            <p class="text-warning">Data Barang Masih Kosong
+                                                                <code>Isi Data barang</code>
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                ?>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+                                            data-target=".bd-example-modal-lg">Tambah Barang</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <h4>Data Faktur</h4>
+                        <section>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" id="tampilan" name="tampilan"
+                                            placeholder="Nomor-Surat" value="<?= $bikin_kode ?>" readonly>
                                         <input type="hidden" name="nomor_surat" value="<?= $bikin_kode ?>">
                                         <input type="hidden" name="kode" value="<?= $kode ?>">
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="date-format">Tanggal <span
-                                            class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="text" name="tgl_surat" id="date-format"
-                                            class="form-control input-rounded" placeholder="tanggal">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" name="tgl_surat" class="form-control"
+                                            placeholder="Masukkan tanggal" id="mdate" data-dtp="dtp_5cLR3" required>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="pembuat">Pembuat <span
-                                            class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="text" id="pembuat" class="form-control input-rounded" name="pembuat"
-                                            placeholder="Pembuat">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" id="pembuat" class="form-control" name="pembuat"
+                                            placeholder="Masukan Nama" required>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="pelanggan">Pelanggan <span
-                                            class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="text" id="pelanggan" class="form-control input-rounded"
-                                            name="pelanggan" placeholder="Pelanggan">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" name="ppn" id="ppn" placeholder="ppn">
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="alamat_pelanggan">Alamat Pelanggan
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="text" id="alamat_pelanggan" class="form-control input-rounded"
-                                            name="alamat_pelanggan" placeholder="Alamat Pelanggan">
+                            </div>
+                        </section>
+                        <h4>Data Pelanggan</h4>
+                        <section>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" id="pelanggan" class="form-control" name="pelanggan"
+                                            placeholder="Masukkan nama Pelanggan" required>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="keterangan">Keterangan <span
-                                            class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" id="alamat_pelanggan" class="form-control"
+                                            name="alamat_pelanggan" placeholder="Alamat Pelanggan" required>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="keterangan">Keterangan</label>
                                         <textarea class="form-control h-150px" id="keterangan" name="keterangan" rows="6"
                                             id="comment"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="ppn">Ppn <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="number" class="form-control input-rounded" name="ppn" id="ppn"
-                                            placeholder="ppn">
+                            </div>
+                        </section>
+                        <h4>Konfirmasi</h4>
+                        <section>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control input-rounded" name="subtotal" value="<?php if (is_numeric($subtotal) && $subtotal >= 0) {
+                                            echo $subtotal;
+                                        } ?>" placeholder="subtotal">
+                                        <input type="text" class="form-control" name="subtotal" value="<?php if (is_numeric($subtotal) && $subtotal >= 0) {
+                                            echo $subtotal;
+                                        } ?>" placeholder="subtotal" readonly>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="subtotal">Subtotal <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="number" class="form-control input-rounded" name="subtotal" id="subtotal" value="<?= $subtotal ?>"
-                                            placeholder="subtotal">
-                                    </div> 
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" name="terbilang" id="terbilang" value="<?php if (is_numeric($angka) && $angka >= 0) {
+                                            echo terbilang($angka);
+                                        } ?>" placeholder="terbilang">
+                                        <input type="text" class="form-control" name="terbilang" id="terbilang" value="<?php if (is_numeric($angka) && $angka >= 0) {
+                                            echo terbilang($angka);
+                                        } ?>" placeholder="terbilang" readonly>
+                                    </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="terbilang">terbilang <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input type="text" class="form-control input-rounded" name="terbilang" id="terbilang" value="<?php if (is_numeric($angka) && $angka >= 0) {
-                                                echo terbilang($angka);
-                                            } else {
-                                                echo "Input tidak valid. Masukkan angka yang benar.";
-                                            } ?>"
-                                            placeholder="terbilang">
-                                    </div> 
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-8 ml-auto">
+                                <div class="col-lg-12">
+                                    <div class="col-12 h-100 d-flex flex-column justify-content-center align-items-center">
+                                        <p>Apakah Data sudah benar?</p>
                                         <button type="submit" name="submit" class="btn btn-primary">Submit<span
                                                 class="btn-icon-right"><i class="fa fa-check"></i></span></button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </section>
                     </div>
-                </div>
+                </form>
             </div>
-
-            <!-- #/ container -->
         </div>
-        <script> // Fungsi untuk menghapus blok barang
-    function hapusBarang(element) {
-        var container = element.closest('.barang-container');
-        if (container.parentNode.childElementCount > 1) {
-            container.parentNode.removeChild(container);
-        }
-    }</script>
-    <?php } ?>
+        <!-- #/ container -->
+
+    </div>
+<?php } ?>

@@ -11,9 +11,11 @@ $conn = new mysqli($host, $username, $password, $database);
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
+
     <link href="css/style.css" rel="stylesheet">
-    <link href="./plugins/sweetalert/css/sweetalert.css" rel="stylesheet">
     <link href="css/style2.css" rel="stylesheet">
+
+    <link href="./plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="./plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
     <!-- Page plugins css -->
