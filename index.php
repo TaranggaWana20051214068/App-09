@@ -57,6 +57,19 @@ include('include/functions.php');
         ***********************************-->
         <div class="content-body">
             <?php
+            // Ambil nilai parameter 'gagal' dari URL
+            $gagal = isset($_GET['gagal']) ? $_GET['gagal'] : '';
+
+            // Periksa nilai parameter dan berikan respon sesuai
+            if ($gagal == 'id-kosong') {
+                echo '<div id="hapus" class="alert alert-warning">Data Kosong</div>';
+                echo '<script>
+    setTimeout(function() {
+        var successMessage = document.getElementById("hapus");
+        successMessage.style.display = "none";
+    }, 5000); // 3000 milidetik atau 3 detik
+    </script>';
+            }
             if (isset($_SESSION['success_message'])) {
                 echo '<div id="success-message" class="alert alert-success">
                 <h4 class="alert-heading">' . $_SESSION['success_message'] . '!!</h4>
@@ -142,13 +155,14 @@ include('include/functions.php');
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Data Table <button type="button"
-                                            onclick="window.location.href='?page=add'" class="btn mb-1 btn-primary">Tambah
-                                            Data <span class="btn-icon-right"><i class="fa fa-plus color-info"></i></span>
-                                        </button>
+                                    <h4 class="card-title">Data Faktur
                                     </h4>
-
+                                    <button type="button" onclick="window.location.href='?page=add'"
+                                        class="btn btn-rounded mb-1 btn-outline-info">Tambah
+                                        Data <span class="btn-icon-right"><i class="fa fa-plus color-info"></i></span>
+                                    </button>
                                     <div class="table-responsive">
+
                                         <table
                                             class="table table-striped table-bordered zero-configuration verticle-middle">
                                             <?php
@@ -162,7 +176,6 @@ include('include/functions.php');
                                                     <th>Alamat Pelanggan</th>
                                                     <th>Tanggal</th>
                                                     <th>Subtotal</th>
-                                                    <th>ppn</th>
                                                     <th>Jumlah Barang</th>
                                                     <th>Cetak</th>
                                                     <th>Action</th>
@@ -174,10 +187,16 @@ include('include/functions.php');
 
                                                 if (mysqli_num_rows($query_surat) > 0) {
                                                     $no = 1;
-
+                                                    $hasil = 0;
                                                     while ($row_surat = mysqli_fetch_array($query_surat)) {
                                                         $id_surat = $row_surat["id"];
-
+                                                        $queryBarang = mysqli_query($conn, "SELECT harga_sat, qty FROM tbl_barang WHERE id_surat = '$id_surat'");
+                                                        $subtotal = 0;  // Inisialisasi subtotal untuk setiap id_surat
+                                            
+                                                        while ($res = mysqli_fetch_assoc($queryBarang)) {
+                                                            $subtotal += ($res['harga_sat'] * $res['qty']);
+                                                        }
+                                                        $hasil += $subtotal;
                                                         // Query untuk menghitung jumlah barang
                                                         $stmt = $conn->prepare("SELECT COUNT(*) AS jumlah_barang FROM tbl_barang WHERE id_surat = ?");
                                                         $stmt->bind_param("i", $id_surat);
@@ -207,34 +226,29 @@ include('include/functions.php');
                                                                 <?= $row_surat['tgl_surat'] ?>
                                                             </td>
                                                             <td>
-                                                                <?= $row_surat['sub_total'] ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= ($row_surat['ppn']) ? $row_surat['ppn'] : '0%'; ?>
+                                                                <?= rupiah($subtotal) ?>
                                                             </td>
                                                             <td>
                                                                 <?= ($r_barang['jumlah_barang']) ? $r_barang['jumlah_barang'] : 'Kosong'; ?>
                                                             </td>
                                                             <td>
-                                                                <button
+                                                                <button type="button"
                                                                     onclick="window.open('/surat.php?id=<?= $id_surat ?>', '_blank')"
-                                                                    class="btn mb-1 btn-primary btn-sm">Cetak
-                                                                    Invoice</button>
+                                                                    class="btn btn-xs mb-1 btn-rounded btn-outline-info">Cetak
+                                                                    Faktur<span class="btn-icon-right"><i
+                                                                            class="fa fa-download"></i></span>
+                                                                </button>
                                                             </td>
                                                             <td>
-                                                                <span>
-                                                                    <a href="?page=edit&id=<?= $id_surat ?>" data-toggle="tooltip"
-                                                                        data-placement="top" title="" data-original-title="Edit">
-                                                                        <i class="fa fa-pencil color-muted m-r-5"></i>
-                                                                    </a>
-                                                                    <a href="?page=del&id=<?= $id_surat ?>" data-toggle="tooltip"
-                                                                        data-placement="top" title="" data-original-title="Close">
-                                                                        <i class="fa fa-close color-danger"></i>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-primary btn-danger"
+                                                                <div class="btn-group mb-2 btn-group-sm">
+                                                                    <button type="button"
+                                                                        onclick="window.location.href='?page=edit&id=<?= $id_surat ?>'"
+                                                                        class="btn btn-xs btn-success" data-toggle="modal"
+                                                                        data-target="#basicModal<?= $id_surat ?>">Edit</button>
+                                                                    <button type="button" class="btn btn-xs btn-danger"
                                                                         data-toggle="modal"
                                                                         data-target="#basicModal<?= $id_surat ?>">Hapus</button>
-                                                                </span>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                         <div class="bootstrap-modal">

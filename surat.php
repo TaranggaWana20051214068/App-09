@@ -9,14 +9,9 @@ if (isset($_REQUEST['id'])) {
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
 
-    // Pastikan $row['sub_total'] adalah numerik
-    $sub_total = floatval($row['sub_total']);
 
-    // Pastikan $row['ppn'] adalah numerik
-    $ppn = is_numeric($row['ppn']) ? (($row['ppn'] / 100) * $sub_total) : 0;
 
-    // Jumlahkan secara numerik
-    $total = $ppn + $sub_total;
+
 
 } else {
     $id = NULL;
@@ -123,6 +118,7 @@ if (isset($_REQUEST['id'])) {
                                             if (isset($_REQUEST['id'])) {
                                                 $queryBarang = mysqli_query($conn, "SELECT * FROM tbl_barang WHERE id_surat = $id");
                                                 $no = 1;
+                                                $sub_total = 0;
                                                 if (mysqli_num_rows($queryBarang) > 0) {
                                                     while ($row_barang = mysqli_fetch_assoc($queryBarang)) {
                                                         ?>
@@ -143,10 +139,17 @@ if (isset($_REQUEST['id'])) {
                                                                 <?= ($row_barang['harga_sat']) ? rupiah($row_barang['harga_sat']) : "0" ?>
                                                             </td>
                                                             <td class="color-primary">
-                                                                <?= ($row_barang['jumlah']) ? rupiah($row_barang['jumlah']) : "0" ?>
+                                                                <?= rupiah($row_barang['qty'] * $row_barang['harga_sat']) ?>
                                                             </td>
                                                         </tr>
                                                         <?php
+                                                        $jumlah = (int) $row_barang['qty'] * (int) $row_barang['harga_sat'];
+                                                        $sub_total += $jumlah;
+                                                        // Pastikan $row['ppn'] adalah numerik
+                                                        $ppn = is_numeric($row['ppn']) ? (($row['ppn'] / 100) * $sub_total) : 0;
+
+                                                        // Jumlahkan secara numerik
+                                                        $total = $ppn + $sub_total;
                                                         $no++;
                                                     }
                                                 }

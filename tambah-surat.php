@@ -21,8 +21,8 @@ if (isset($_REQUEST["submit"])) {
         $ppn = $_POST['ppn'];
 
         // Query untuk menyimpan data ke tabel tbl_surat
-        $sql = "INSERT INTO tbl_surat (tgl_surat, nomer_surat, kode, pembuat, pelanggan, alamat_pelanggan, keterangan, ppn, sub_total, terbilang)
-                VALUES ('$tgl_surat', '$nomor_surat', '$kode', '$pembuat', '$pelanggan', '$alamat_pelanggan', '$keterangan', '$ppn', '$subtotal', '$terbilang')";
+        $sql = "INSERT INTO tbl_surat (tgl_surat, nomer_surat, kode, pembuat, pelanggan, alamat_pelanggan, keterangan, ppn)
+                VALUES ('$tgl_surat', '$nomor_surat', '$kode', '$pembuat', '$pelanggan', '$alamat_pelanggan', '$keterangan', '$ppn')";
 
         // Eksekusi query
         if ($conn->query($sql) === TRUE) {
@@ -36,10 +36,8 @@ if (isset($_REQUEST["submit"])) {
                         $qty = $tableDet[$i]['qty'];
                         $harga_sat = $tableDet[$i]['harga_sat'];
 
-                        // Hitung jumlah (hasil perkalian qty dan harga_sat)
-                        $jumlah = $qty * $harga_sat;
-                        $queryBarang = mysqli_query($conn, "INSERT INTO tbl_barang (id_surat, kode_barang, nama_barang, qty, harga_sat, jumlah)
-                                    VALUES ('$id_surat_add', '$kode_barang', '$nama_barang', '$qty', '$harga_sat', '$jumlah')");
+                        $queryBarang = mysqli_query($conn, "INSERT INTO tbl_barang (id_surat, kode_barang, nama_barang, qty, harga_sat)
+                                    VALUES ('$id_surat_add', '$kode_barang', '$nama_barang', '$qty', '$harga_sat')");
                         if (!$queryBarang) {
                             echo "Error: " . $sql . "<br>" . $conn->error;
                             echo '<div class="alert alert-danger alert-dismissible fade show">
@@ -234,9 +232,7 @@ if (isset($_REQUEST["submit"])) {
                                                             </tr>
                                                             <?php
                                                             // Tambahkan jumlah ke total jumlah
-                                                            $jumlah = (int) $tableDet[$i]['qty'] * (int) $tableDet[$i]['harga_sat'];
-                                                            $subtotal += $jumlah;
-                                                            $angka = $subtotal;
+                                            
                                                         }
                                                     }
                                                 } else {
@@ -321,26 +317,6 @@ if (isset($_REQUEST["submit"])) {
                         <h4>Konfirmasi</h4>
                         <section>
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="hidden" class="form-control input-rounded" name="subtotal" value="<?php if (is_numeric($subtotal) && $subtotal >= 0) {
-                                            echo $subtotal;
-                                        } ?>" placeholder="subtotal">
-                                        <input type="text" class="form-control" name="subtotal" value="<?php if (is_numeric($subtotal) && $subtotal >= 0) {
-                                            echo $subtotal;
-                                        } ?>" placeholder="subtotal" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="hidden" class="form-control" name="terbilang" id="terbilang" value="<?php if (is_numeric($angka) && $angka >= 0) {
-                                            echo terbilang($angka);
-                                        } ?>" placeholder="terbilang">
-                                        <input type="text" class="form-control" name="terbilang" id="terbilang" value="<?php if (is_numeric($angka) && $angka >= 0) {
-                                            echo terbilang($angka);
-                                        } ?>" placeholder="terbilang" readonly>
-                                    </div>
-                                </div>
                                 <div class="col-lg-12">
                                     <div class="col-12 h-100 d-flex flex-column justify-content-center align-items-center">
                                         <p>Apakah Data sudah benar?</p>

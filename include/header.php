@@ -7,48 +7,18 @@
             </div>
         </div>
         <div class="header-left">
-            <ul class="clearfix">
-                <li>
-                    <h2>
-                        <?= (isset($_SESSION['judul'])) ? $_SESSION['judul'] : 'Faktur' ?>
-                    </h2>
-                </li>
-            </ul>
-        </div>
-
-        <div class="header-right">
-            <ul class="clearfix">
-                <li class="icons dropdown">
-                    <div class="user-img c-pointer position-relative" data-toggle="dropdown">
-                        <span class="activity active"></span>
-                        <img src="images/user/1.png" height="40" width="40" alt="">
-                    </div>
-                    <div class="drop-down dropdown-profile   dropdown-menu">
-                        <div class="dropdown-content-body">
-                            <ul>
-                                <li>
-                                    <a href="app-profile.html"><i class="icon-user"></i>
-                                        <span>Profile</span></a>
-                                </li>
-                                <li>
-                                    <a href="email-inbox.html"><i class="icon-envelope-open"></i>
-                                        <span>Inbox</span>
-                                        <div class="badge gradient-3 badge-pill badge-primary">3</div>
-                                    </a>
-                                </li>
-
-                                <hr class="my-2">
-                                <li>
-                                    <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock
-                                            Screen</span></a>
-                                </li>
-                                <li><a href="page-login.html"><i class="icon-key"></i> <span>Logout</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+            <div class="input-group icons">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-transparent border-0 pr-2 pr-sm-3" id="basic-addon1"><i
+                            class="mdi mdi-magnify"></i></span>
+                </div>
+                <input type="search" class="form-control" placeholder="Search Dashboard" aria-label="Search Dashboard">
+                <div class="drop-down   d-md-none">
+                    <form action="#">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
