@@ -32,23 +32,18 @@ if (isset($_REQUEST["submit"])) {
         exit;
     } else {
         $tgl_surat = $_POST['tgl_surat'];
-        $nomor_surat = $_POST['nomor_surat'];
-        $kode = $_POST['kode'];
         $pembuat = $_POST['pembuat'];
         $pelanggan = $_POST['pelanggan'];
         $alamat_pelanggan = $_POST['alamat_pelanggan'];
-        $subtotal = $_POST['subtotal'];
-        $terbilang = $_POST['terbilang'];
         $keterangan = $_POST['keterangan'];
         $ppn = $_POST['ppn'];
-
+        $id = $_REQUEST['id'];
         // Query untuk menyimpan data ke tabel tbl_surat
-        $sql = "INSERT INTO tbl_surat (tgl_surat, nomer_surat, kode, pembuat, pelanggan, alamat_pelanggan, keterangan, ppn)
-                VALUES ('$tgl_surat', '$nomor_surat', '$kode', '$pembuat', '$pelanggan', '$alamat_pelanggan', '$keterangan', '$ppn')";
+        $sql = "UPDATE tbl_surat SET tgl_surat ='$tgl_surat', pembuat = '$pembuat', pelanggan = '$pelanggan', alamat_pelanggan = '$alamat_pelanggan', keterangan = '$keterangan', ppn = '$ppn' WHERE id = '$id'";
 
         // Eksekusi query
         if ($conn->query($sql) === TRUE) {
-            $id_surat_add = $conn->insert_id; // Mendapatkan ID yang baru saja di-generate oleh query INSERT
+            $id_surat_add = $id; // Mendapatkan ID yang baru saja di-generate oleh query INSERT
             if (isset($_SESSION["tableDet"])) {
                 $tableDet = $_SESSION["tableDet"];
                 foreach ($tableDet as $i => $v) {
