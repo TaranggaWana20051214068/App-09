@@ -1,0 +1,225 @@
+<?php
+$actArray = [
+    'add' => 'tambah-surat.php',
+    'edit' => 'edit-surat.php',
+    'surat' => 'surat.php'
+
+];
+if (isset($_REQUEST['page'])) {
+    $act = $_REQUEST['page'];
+    if (array_key_exists($act, $actArray)) {
+        $halaman = $actArray[$act];
+        if (file_exists($halaman)) {
+            include $halaman;
+        } else {
+            ?>
+            <script>window.location.href = "include/page-error-404.php";</script>
+            <?php
+        }
+    } else {
+        ?>
+        <script>window.location.href = "include/page-error-404.php";</script>
+        <?php
+    }
+} else {
+    // Ambil nilai parameter 'gagal' dari URL
+    $gagal = isset($_GET['gagal']) ? $_GET['gagal'] : '';
+
+    // Periksa nilai parameter dan berikan respon sesuai
+    if ($gagal == 'id-kosong') {
+        echo '<div id="hapus" class="alert alert-warning">Data Kosong</div>';
+        echo '<script>
+setTimeout(function() {
+var successMessage = document.getElementById("hapus");
+successMessage.style.display = "none";
+}, 5000); // 3000 milidetik atau 3 detik
+</script>';
+    }
+    if (isset($_SESSION['success_message'])) {
+        echo '<div id="success-message" class="alert alert-success">
+    <h4 class="alert-heading">' . $_SESSION['success_message'] . '!!</h4>
+    <p>Data Berhasil Ditambahkan</p>
+  </div>';
+        echo '<script>
+    setTimeout(function() {
+        var successMessage = document.getElementById("success-message");
+        successMessage.style.display = "none";
+    }, 5000); // 3000 milidetik atau 3 detik
+  </script>';
+        unset($_SESSION['success_message']); // Hapus pesan agar tidak ditampilkan lagi
+    }
+    if (isset($_SESSION['hapus'])) {
+        echo '<div id="hapus" class="alert alert-info">' . $_SESSION['hapus'] . '</div>';
+        echo '<script>
+    setTimeout(function() {
+        var successMessage = document.getElementById("hapus");
+        successMessage.style.display = "none";
+    }, 5000); // 3000 milidetik atau 3 detik
+    </script>';
+        unset($_SESSION['hapus']);
+    }
+    if (isset($_REQUEST['delet'])) {
+        $id = $_POST['id'];
+
+        $sql = mysqli_query($conn, "DELETE a, b FROM tbl_surat a LEFT JOIN tbl_barang b ON a.id = b.id_surat WHERE a.id = '$id'");
+
+        if ($sql === false) {
+            echo '<div class="alert alert-warning">Gagal Menghapus Data!</div>';
+            // Log pesan kesalahan untuk referensi internal jika diperlukan
+            error_log("Gagal menghapus data: " . mysqli_error($conn));
+        } else {
+            echo '<div class="alert alert-info">Data berhasil dihapus!</div>';
+            $_SESSION['hapus'] = "Data berhasil diahapus";
+            ?>
+            <script>window.location.href = "index.php";</script>
+            <?php
+            exit(); // Opsional: Menghentikan eksekusi script setelah menampilkan pesan sukses
+        }
+    }
+    ?>
+    <div class="row page-titles mx-0">
+        <div class="col p-md-0">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="?">Dashboard</a></li>
+                <li class="breadcrumb-item active"><a href="javascript:void(0)">
+                        <?= $judul ?>
+                    </a></li>
+            </ol>
+        </div>
+    </div>
+    <!-- row -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Data Faktur
+                        </h4>
+                        <button type="button" onclick="window.location.href='?page=add'"
+                            class="btn btn-rounded mb-1 btn-outline-info">Tambah
+                            Data <span class="btn-icon-right"><i class="fa fa-plus color-info"></i></span>
+                        </button>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered zero-configuration">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">No</th>
+                                        <th width="5%">No.Surat</th>
+                                        <th>Pelanggan</th>
+                                        <th>Alamat Pelanggan</th>
+                                        <th>Tanggal</th>
+                                        <th>Subtotal</th>
+                                        <th width="5%">Jumlah Barang</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $query_surat = mysqli_query($conn, 'SELECT * FROM tbl_surat ORDER BY id DESC');
+                                    if (mysqli_num_rows($query_surat) > 0) {
+                                        $no = 1;
+                                        $hasil = 0;
+                                        while ($row_surat = mysqli_fetch_array($query_surat)) {
+                                            $id_surat = $row_surat["id"];
+                                            $queryBarang = mysqli_query($conn, "SELECT harga_sat, qty FROM tbl_barang WHERE id_surat = '$id_surat'");
+                                            $subtotal = 0;  // Inisialisasi subtotal untuk setiap id_surat
+                                
+                                            while ($res = mysqli_fetch_assoc($queryBarang)) {
+                                                $subtotal += ($res['harga_sat'] * $res['qty']);
+                                            }
+                                            $hasil += $subtotal;
+                                            // Query untuk menghitung jumlah barang
+                                            $stmt = $conn->prepare("SELECT COUNT(*) AS jumlah_barang FROM tbl_barang WHERE id_surat = ?");
+                                            $stmt->bind_param("i", $id_surat);
+                                            $stmt->execute();
+                                            $result_barang = $stmt->get_result();
+
+                                            // Menggunakan mysqli_fetch_assoc untuk mengambil hasil query sebagai array asosiatif
+                                            $r_barang = mysqli_fetch_assoc($result_barang);
+
+
+                                            // Tampilkan data surat dan jumlah barang
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <?= $no ?>
+                                                </td>
+                                                <td>
+                                                    <?= $row_surat['nomer_surat'] ?>
+                                                </td>
+                                                <td>
+                                                    <?= $row_surat['pelanggan'] ?>
+                                                </td>
+                                                <td>
+                                                    <?= $row_surat['alamat_pelanggan'] ?>
+                                                </td>
+                                                <td>
+                                                    <?= $row_surat['tgl_surat'] ?>
+                                                </td>
+                                                <td>
+                                                    <?= rupiah($subtotal) ?>
+                                                </td>
+                                                <td>
+                                                    <?= ($r_barang['jumlah_barang']) ? $r_barang['jumlah_barang'] : 'Kosong'; ?>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group mb-2 btn-group-sm">
+                                                        <button type="button"
+                                                            onclick="window.open('./surat.php?id=<?= $id_surat ?>', '_blank')"
+                                                            class="btn btn-xs btn-info">Cetak</button>
+                                                        <button type="button"
+                                                            onclick="window.location.href='?page=edit&id=<?= $id_surat ?>'"
+                                                            class="btn btn-xs btn-primary" data-toggle="modal"
+                                                            data-target="#basicModal<?= $id_surat ?>">Edit</button>
+                                                        <button type="button" class="btn btn-xs btn-danger" data-toggle="modal"
+                                                            data-target="#basicModal<?= $id_surat ?>">Hapus</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <div class="bootstrap-modal">
+                                                <!-- Button trigger modal -->
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="basicModal<?= $id_surat ?>" style="display: none;"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Hapus Data</h5>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal"><span>×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">Yakin ingin menghapus?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form method="POST" action="#">
+                                                                    <input type="hidden" name="id" value="<?= $id_surat ?>">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Close</button>
+                                                                    <button type="submit" name="delet"
+                                                                        class="btn btn-primary btn-danger">Hapus</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                            $no++;
+                                        }
+                                    } else { ?>
+                                        <div class="alert alert-primary">Tidak ada data ditemukan silahkan Tambah
+                                            Data
+                                            <a href="?page=add" class="alert-link">Click Disini</a>
+                                        </div>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>

@@ -65,15 +65,11 @@ if (!isset($_SESSION['login'])) {
 
             $judul = "Halaman Utama";
             $actArray = [
-                'add' => 'tambah-surat.php',
-                'edit' => 'edit-surat.php',
-                'del' => 'hapus-surat.php',
-                'surat' => 'surat.php',
-                'coding' => 'coding.php'
+                'rapat' => 'dasboard-surat-rapat.php'
 
             ];
-            if (isset($_REQUEST['page'])) {
-                $act = $_REQUEST['page'];
+            if (isset($_REQUEST['sur'])) {
+                $act = $_REQUEST['sur'];
                 if (array_key_exists($act, $actArray)) {
                     $halaman = $actArray[$act];
                     if (file_exists($halaman)) {
@@ -89,60 +85,6 @@ if (!isset($_SESSION['login'])) {
                     <?php
                 }
             } else {
-                // Ambil nilai parameter 'gagal' dari URL
-                $gagal = isset($_GET['gagal']) ? $_GET['gagal'] : '';
-
-                // Periksa nilai parameter dan berikan respon sesuai
-                if ($gagal == 'id-kosong') {
-                    echo '<div id="hapus" class="alert alert-warning">Data Kosong</div>';
-                    echo '<script>
-    setTimeout(function() {
-        var successMessage = document.getElementById("hapus");
-        successMessage.style.display = "none";
-    }, 5000); // 3000 milidetik atau 3 detik
-    </script>';
-                }
-                if (isset($_SESSION['success_message'])) {
-                    echo '<div id="success-message" class="alert alert-success">
-                <h4 class="alert-heading">' . $_SESSION['success_message'] . '!!</h4>
-                <p>Data Berhasil Ditambahkan</p>
-              </div>';
-                    echo '<script>
-                setTimeout(function() {
-                    var successMessage = document.getElementById("success-message");
-                    successMessage.style.display = "none";
-                }, 5000); // 3000 milidetik atau 3 detik
-              </script>';
-                    unset($_SESSION['success_message']); // Hapus pesan agar tidak ditampilkan lagi
-                }
-                if (isset($_SESSION['hapus'])) {
-                    echo '<div id="hapus" class="alert alert-info">' . $_SESSION['hapus'] . '</div>';
-                    echo '<script>
-                setTimeout(function() {
-                    var successMessage = document.getElementById("hapus");
-                    successMessage.style.display = "none";
-                }, 5000); // 3000 milidetik atau 3 detik
-                </script>';
-                    unset($_SESSION['hapus']);
-                }
-                if (isset($_REQUEST['delet'])) {
-                    $id = $_POST['id'];
-
-                    $sql = mysqli_query($conn, "DELETE a, b FROM tbl_surat a LEFT JOIN tbl_barang b ON a.id = b.id_surat WHERE a.id = '$id'");
-
-                    if ($sql === false) {
-                        echo '<div class="alert alert-warning">Gagal Menghapus Data!</div>';
-                        // Log pesan kesalahan untuk referensi internal jika diperlukan
-                        error_log("Gagal menghapus data: " . mysqli_error($conn));
-                    } else {
-                        echo '<div class="alert alert-info">Data berhasil dihapus!</div>';
-                        $_SESSION['hapus'] = "Data berhasil diahapus";
-                        ?>
-                        <script>window.location.href = "index.php";</script>
-                        <?php
-                        exit(); // Opsional: Menghentikan eksekusi script setelah menampilkan pesan sukses
-                    }
-                }
                 ?>
                 <div class="row page-titles mx-0">
                     <div class="col p-md-0">
@@ -158,149 +100,122 @@ if (!isset($_SESSION['login'])) {
 
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Data Faktur
-                                    </h4>
-                                    <button type="button" onclick="window.location.href='?page=add'"
-                                        class="btn btn-rounded mb-1 btn-outline-info">Tambah
-                                        Data <span class="btn-icon-right"><i class="fa fa-plus color-info"></i></span>
-                                    </button>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered zero-configuration">
-                                            <thead>
-                                                <tr>
-                                                    <th width="5%">No</th>
-                                                    <th width="5%">No.Surat</th>
-                                                    <th>Pelanggan</th>
-                                                    <th>Alamat Pelanggan</th>
-                                                    <th>Tanggal</th>
-                                                    <th>Subtotal</th>
-                                                    <th width="5%">Jumlah Barang</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                $query_surat = mysqli_query($conn, 'SELECT * FROM tbl_surat ORDER BY id DESC');
-                                                if (mysqli_num_rows($query_surat) > 0) {
-                                                    $no = 1;
-                                                    $hasil = 0;
-                                                    while ($row_surat = mysqli_fetch_array($query_surat)) {
-                                                        $id_surat = $row_surat["id"];
-                                                        $queryBarang = mysqli_query($conn, "SELECT harga_sat, qty FROM tbl_barang WHERE id_surat = '$id_surat'");
-                                                        $subtotal = 0;  // Inisialisasi subtotal untuk setiap id_surat
-                                            
-                                                        while ($res = mysqli_fetch_assoc($queryBarang)) {
-                                                            $subtotal += ($res['harga_sat'] * $res['qty']);
-                                                        }
-                                                        $hasil += $subtotal;
-                                                        // Query untuk menghitung jumlah barang
-                                                        $stmt = $conn->prepare("SELECT COUNT(*) AS jumlah_barang FROM tbl_barang WHERE id_surat = ?");
-                                                        $stmt->bind_param("i", $id_surat);
-                                                        $stmt->execute();
-                                                        $result_barang = $stmt->get_result();
-
-                                                        // Menggunakan mysqli_fetch_assoc untuk mengambil hasil query sebagai array asosiatif
-                                                        $r_barang = mysqli_fetch_assoc($result_barang);
-
-
-                                                        // Tampilkan data surat dan jumlah barang
-                                                        ?>
+                                    <div class="email-left-box">
+                                        <div role="toolbar" class="toolbar">
+                                            <button aria-expanded="false" data-toggle="dropdown"
+                                                class="btn btn-block btn-primary dropdown-toggle" type="button">Surat
+                                                <span class="caret m-l-5"></span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a href="?sur=rapat" class="dropdown-item">Surat</a>
+                                            </div>
+                                        </div>
+                                        <div class="mail-list mt-4"><a href="email-inbox.html"
+                                                class="list-group-item border-0 text-primary p-r-0"><i
+                                                    class="fa fa-inbox font-18 align-middle mr-2"></i> <b>Inbox</b> <span
+                                                    class="badge badge-primary badge-sm float-right m-t-5">198</span> </a>
+                                            <!-- <a href="#" class="list-group-item border-0 p-r-0"><i
+                                                    class="fa fa-paper-plane font-18 align-middle mr-2"></i>Sent</a> <a
+                                                href="#" class="list-group-item border-0 p-r-0"><i
+                                                    class="fa fa-star-o font-18 align-middle mr-2"></i>Important <span
+                                                    class="badge badge-danger badge-sm float-right m-t-5">47</span> </a>
+                                            <a href="#" class="list-group-item border-0 p-r-0"><i
+                                                    class="mdi mdi-file-document-box font-18 align-middle mr-2"></i>Draft</a><a
+                                                href="#" class="list-group-item border-0 p-r-0"><i
+                                                    class="fa fa-trash font-18 align-middle mr-2"></i>Trash</a> -->
+                                        </div>
+                                        <h5 class="mt-5 m-b-10">Categories</h5>
+                                        <div class="list-group mail-list"><a href="#" class="list-group-item border-0">
+                                                <!-- <span class="fa fa-briefcase f-s-14 mr-2"></span>Work</a>   -->
+                                                <a href="#" class="list-group-item border-0"><i
+                                                        class="mdi mdi-file-document-box font-18 align-middle mr-2"></i>Surat</a>
+                                                <!-- <a href="#"class="list-group-item border-0"><span class="fa fa-ticket f-s-14 mr-2"></span>Support</a>  
+                                    <a href="#" class="list-group-item border-0"><span class="fa fa-tags f-s-14 mr-2"></span>Social</a> -->
+                                        </div>
+                                    </div>
+                                    <div class="email-right-box">
+                                        <div class="table-responsive">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
                                                         <tr>
-                                                            <td>
-                                                                <?= $no ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= $row_surat['nomer_surat'] ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= $row_surat['pelanggan'] ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= $row_surat['alamat_pelanggan'] ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= $row_surat['tgl_surat'] ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= rupiah($subtotal) ?>
-                                                            </td>
-                                                            <td>
-                                                                <?= ($r_barang['jumlah_barang']) ? $r_barang['jumlah_barang'] : 'Kosong'; ?>
-                                                            </td>
-                                                            <td>
-                                                                <div class="btn-group mb-2 btn-group-sm">
-                                                                    <button type="button"
-                                                                        onclick="window.open('./surat.php?id=<?= $id_surat ?>', '_blank')"
-                                                                        class="btn btn-xs btn-info">Cetak</button>
-                                                                    <button type="button"
-                                                                        onclick="window.location.href='?page=edit&id=<?= $id_surat ?>'"
-                                                                        class="btn btn-xs btn-primary" data-toggle="modal"
-                                                                        data-target="#basicModal<?= $id_surat ?>">Edit</button>
-                                                                    <button type="button" class="btn btn-xs btn-danger"
-                                                                        data-toggle="modal"
-                                                                        data-target="#basicModal<?= $id_surat ?>">Hapus</button>
-                                                                </div>
-                                                            </td>
+                                                            <th>#</th>
+                                                            <th>No.Surat</th>
+                                                            <th>Pemohon</th>
+                                                            <th>Alamat</th>
+                                                            <th>status</th>
+                                                            <th>Keperluan</th>
+                                                            <th>Actions</th>
                                                         </tr>
-                                                        <div class="bootstrap-modal">
-                                                            <!-- Button trigger modal -->
-                                                            <!-- Modal -->
-                                                            <div class="modal fade" id="basicModal<?= $id_surat ?>"
-                                                                style="display: none;" aria-hidden="true">
-                                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title">Hapus Data</h5>
-                                                                            <button type="button" class="close"
-                                                                                data-dismiss="modal"><span>×</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="modal-body">Yakin ingin menghapus?
-                                                                        </div>
-                                                                        <div class="modal-footer">
-                                                                            <form method="POST" action="#">
-                                                                                <input type="hidden" name="id"
-                                                                                    value="<?= $id_surat ?>">
-                                                                                <button type="button" class="btn btn-secondary"
-                                                                                    data-dismiss="modal">Close</button>
-                                                                                <button type="submit" name="delet"
-                                                                                    class="btn btn-primary btn-danger">Hapus</button>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                    </thead>
+                                                    <tbody>
                                                         <?php
-                                                        $no++;
-                                                    }
-                                                } else { ?>
-                                                    <div class="alert alert-primary">Tidak ada data ditemukan silahkan Tambah
-                                                        Data
-                                                        <a href="?page=add" class="alert-link">Click Disini</a>
-                                                    </div>
-                                                <?php } ?>
-                                            </tbody>
-                                        </table>
+                                                        $qry = "SELECT a.*, b.acc FROM tbl_surat a 
+                                                        LEFT JOIN tbl_approve b ON a.id = b.id_surat ORDER BY a.id DESC";
+                                                        $res = mysqli_query($conn, $qry);
+                                                        if (mysqli_num_rows($res) > 0) {
+                                                            $no = 1;
+                                                            while ($row = mysqli_fetch_assoc($res)) {
+                                                                ?>
+                                                                <tr>
+                                                                    <th>
+                                                                        <?= $no ?>
+                                                                    </th>
+                                                                    <td>
+                                                                        <?= $row['pemohon'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $row['alamat'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= ($row['status']) ? '<span class="badge badge-info px-2">' . $row['status'] . '</span>' : '<span class="badge badge-danger px-2">Belum Disetujui</span>'; ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?= $row['keperluan'] ?>
+                                                                    </td>
+                                                                    <td>
+                                                                        <?php
+                                                                        if (isset($row['acc']) && $row['acc'] == null) {
+                                                                            ?>
+                                                                            <button type="submit" name="acc"
+                                                                                class="btn mb-1 btn-danger">ACC</button>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                </tr>
+                                                                <?php
+                                                                $no++;
+                                                            }
+                                                        } else {
+                                                            ?>
+                                                            <div class="alert alert-primary h-100">Tidak ada Permohonan Surat
+                                                            </div>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php } ?>
-        </div>
-        <!--**********************************
+                <?php } ?>
+            </div>
+            <!--**********************************
             Content body end
         ***********************************-->
-    </div>
-    <!--**********************************
+        </div>
+        <!--**********************************
         Main wrapper end
     ***********************************-->
-    <?php include('include/footer.php'); ?>
+        <?php include('include/footer.php'); ?>
 </body>
 
 </html>

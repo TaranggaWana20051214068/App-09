@@ -7,9 +7,9 @@ $conn = new mysqli($host, $username, $password, $database);
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Tambah Surat</title>
+    <title>RT-09</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logo-pb.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo-dki-512.png">
     <!-- Custom Stylesheet -->
 
     <link href="css/style.css" rel="stylesheet">

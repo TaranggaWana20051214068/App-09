@@ -4,12 +4,10 @@
             <li class="nav-label">Dashboard</li>
             <li>
                 <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                    <i class="icon-speedometer menu-icon"></i><span class="nav-text">Surat</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="./index.php">Halaman Utama</a></li>
-                    <li><a href="?page=add">Tambah Surat</a></li>
-                    <li><a href="?page=coding">Coding</a></li>
+                    <li><a href="?sur=rapat">Surat Rapat</a></li>
                 </ul>
             </li>
 

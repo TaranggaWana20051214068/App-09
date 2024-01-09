@@ -4,14 +4,13 @@ if (isset($_SESSION['login'])) {
     header('Location: ./');
     die();
 }
-date_default_timezone_set("Asia/Jakarta");
 
 require_once("include/config.php");
 require_once("vendor/autoload.php");
 
-$client_id = "338439543635-75lgpg656gfnico9b82b5l0620f298n1.apps.googleusercontent.com";
-$client_secret = "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";
-$redirect_url = "http://localhost/khai/login.php";
+$client_id = "690718480185-b8tgufpfbnujabma1l1o1f03srk3h95r.apps.googleusercontent.com";
+$client_secret = "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";
+$redirect_url = "http://localhost:8000/login.php";
 
 // inisiasi google acount
 $client = new google_client();
@@ -34,6 +33,7 @@ if (isset($_GET['code'])) {
         $g_email = $profile['email'];
         $g_id = $profile['id'];
         $g_profile_picture_url = $profile['picture'];
+        $role = 101;
         $query_check = mysqli_prepare($conn, "SELECT full_name,email,oauth_id FROM tbl_users WHERE oauth_id = ?");
         mysqli_stmt_bind_param($query_check, 's', $g_id);
         mysqli_stmt_execute($query_check);
@@ -42,6 +42,9 @@ if (isset($_GET['code'])) {
 
         if (mysqli_num_rows($result_check) > 0) {
             // User exists
+            if ($row['role'] == 0) {
+                $query_update_porfile = mysqli_query($conn, "UPDATE tbl_users SET role = '$role' WHERE oauth_id = '$g_id'");
+            }
             if ($row['file'] == null) {
                 $query_update_porfile = mysqli_query($conn, "UPDATE tbl_users SET file = '$g_profile_picture_url' WHERE oauth_id = '$g_id'");
             }
@@ -56,8 +59,8 @@ if (isset($_GET['code'])) {
                 die('Update Error: ' . mysqli_error($conn));
             }
         } else {
-            $query_insert = mysqli_prepare($conn, "INSERT INTO tbl_users (full_name, email, oauth_id, file) VALUES (?, ?, ?,?)");
-            mysqli_stmt_bind_param($query_insert, 'sssi', $g_name, $g_email, $g_id, $g_profile_picture_url);
+            $query_insert = mysqli_prepare($conn, "INSERT INTO tbl_users (full_name, email, oauth_id, foto, lvl) VALUES (?, ?, ?, ?, ?)");
+            mysqli_stmt_bind_param($query_insert, 'ssssi', $g_name, $g_email, $g_id, $g_profile_picture_url, $role);
             mysqli_stmt_execute($query_insert);
             if ($query_insert === false) {
                 die('Insert Error: ' . mysqli_error($conn));
@@ -74,7 +77,7 @@ if (isset($_GET['code'])) {
         $_SESSION['email'] = $g_email;
         $_SESSION['oauth_id'] = $g_id;
         $_SESSION['p_foto'] = $g_profile_picture_url;
-        header('Location: ./');
+        header("Location: ./");
     }
 }
 ?>
