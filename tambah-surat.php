@@ -113,10 +113,10 @@ if (isset($_REQUEST["submit"])) {
                     </button>
                 </div>
                 <div class="basic-form">
-                    <form action="#" method="post">
+                    <form action="#" method="post" autocomplete="off">
                         <div class="form-group col-md-11 barang">
                             <label for="kode_barang">Kode Barang</label>
-                            <input type="number" id="kode_barang" class="form-control input-rounded" name="kode_barang"
+                            <input type="tel" id="kode_barang" class="form-control input-rounded" name="kode_barang"
                                 placeholder="Kode Barang">
                         </div>
                         <div class="form-group col-md-11">
@@ -129,7 +129,7 @@ if (isset($_REQUEST["submit"])) {
                             <input type="number" id="qty" class="form-control input-rounded" name="qty" placeholder="QTY">
                         </div>
                         <div class="form-group col-md-11">
-                            <labe for="harga_sat">Harga Satuan</labe>
+                            <label for="harga_sat">Harga Satuan</label>
                             <input type="number" id="harga_sat" class="form-control input-rounded" name="harga_sat"
                                 placeholder="Harga Satuan">
                         </div>
@@ -265,7 +265,7 @@ if (isset($_REQUEST["submit"])) {
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <input type="number" class="form-control" id="tampilan" name="tampilan"
-                                            placeholder="Nomor-Surat" value="<?= $bikin_kode ?>" readonly>
+                                            placeholder="Nomor-Surat" value="<?= $bikin_kode ?>">
                                         <input type="hidden" name="nomor_surat" value="<?= $bikin_kode ?>">
                                         <input type="hidden" name="kode" value="<?= $kode ?>">
                                     </div>
@@ -316,7 +316,7 @@ if (isset($_REQUEST["submit"])) {
                         </section>
                         <h4>Konfirmasi</h4>
                         <section>
-                            <div class="row">
+                            <div class="row h-100">
                                 <div class="col-lg-12">
                                     <div class="col-12 h-100 d-flex flex-column justify-content-center align-items-center">
                                         <p>Apakah Data sudah benar?</p>

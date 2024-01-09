@@ -19749,7 +19749,7 @@ html[dir="rtl"]
 }
 
 [data-nav-headerbg="color_1"] .nav-header {
-  background-color: #bebbff;
+  background-color: #b5b4c6;
 }
 
 [data-nav-headerbg="color_2"] .nav-header {
@@ -19786,6 +19786,9 @@ html[dir="rtl"]
 
 [data-nav-headerbg="color_10"] .nav-header {
   background-color: #558b2f !important;
+}
+[data-nav-headerbg="color_11"] .nav-header {
+  background-color: #6596b5 !important;
 }
 
 [data-headerbg="color_1"] .header {

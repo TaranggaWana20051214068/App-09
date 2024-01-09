@@ -9,9 +9,7 @@
                 <ul aria-expanded="false">
                     <li><a href="./index.php">Halaman Utama</a></li>
                     <li><a href="?page=add">Tambah Surat</a></li>
-                    <li><a href="?page=edit">Edit Data</a></li>
-                    <li><a href="?page=del">Hapus Data</a></li>
-                    <li><a href="?page=surat">Cetak Surat</a></li>
+                    <li><a href="?page=coding">Coding</a></li>
                 </ul>
             </li>
 

@@ -9,7 +9,7 @@ $conn = new mysqli($host, $username, $password, $database);
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Tambah Surat</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo-pb.png">
     <!-- Custom Stylesheet -->
 
     <link href="css/style.css" rel="stylesheet">
@@ -18,13 +18,12 @@ $conn = new mysqli($host, $username, $password, $database);
     <link href="./plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="./plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
-    <!-- Page plugins css -->
-    <link href="./plugins/clockpicker/dist/jquery-clockpicker.min.css" rel="stylesheet">
+
     <!-- Color picker plugins css -->
     <link href="./plugins/jquery-asColorPicker-master/css/asColorPicker.css" rel="stylesheet">
     <!-- Date picker plugins css -->
     <link href="./plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
     <!-- Daterange picker plugins css -->
-    <link href="./plugins/timepicker/bootstrap-timepicker.min.css" rel="stylesheet">
+
     <link href="./plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 </head>

@@ -26,13 +26,12 @@
 <script src="js/styleSwitcher.js"></script>
 <script src="./plugins/moment/moment.js"></script>
 
-<script src="./plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
 <!-- form step -->
 <script src="./plugins/jquery-steps/build/jquery.steps.min.js"></script>
 <script src="./plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="./js/plugins-init/jquery-steps-init.js"></script>
-<!-- Clock Plugin JavaScript -->
-<script src="./plugins/clockpicker/dist/jquery-clockpicker.min.js"></script>
+<script src="./plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+
 <!-- Color Picker Plugin JavaScript -->
 <script src="./plugins/jquery-asColorPicker-master/libs/jquery-asColor.js"></script>
 <script src="./plugins/jquery-asColorPicker-master/libs/jquery-asGradient.js"></script>
@@ -40,7 +39,7 @@
 <!-- Date Picker Plugin JavaScript -->
 <script src="./plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 <!-- Date range Plugin JavaScript -->
-<script src="./plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
 <script src="./plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 <script src="./js/plugins-init/form-pickers-init.js"></script>
