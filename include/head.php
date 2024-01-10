@@ -14,7 +14,7 @@ $conn = new mysqli($host, $username, $password, $database);
 
     <link href="css/style.css" rel="stylesheet">
     <link href="css/style2.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
     <link href="./plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
     <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="./plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">

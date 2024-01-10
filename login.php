@@ -34,7 +34,7 @@ if (isset($_GET['code'])) {
         $g_id = $profile['id'];
         $g_profile_picture_url = $profile['picture'];
         $role = 101;
-        $query_check = mysqli_prepare($conn, "SELECT full_name,email,oauth_id FROM tbl_users WHERE oauth_id = ?");
+        $query_check = mysqli_prepare($conn, "SELECT full_name,email,oauth_id,lvl FROM tbl_users WHERE oauth_id = ?");
         mysqli_stmt_bind_param($query_check, 's', $g_id);
         mysqli_stmt_execute($query_check);
         $result_check = mysqli_stmt_get_result($query_check);
@@ -42,11 +42,11 @@ if (isset($_GET['code'])) {
 
         if (mysqli_num_rows($result_check) > 0) {
             // User exists
-            if ($row['role'] == 0) {
-                $query_update_porfile = mysqli_query($conn, "UPDATE tbl_users SET role = '$role' WHERE oauth_id = '$g_id'");
+            if ($row['lvl'] == 0) {
+                $query_update_porfile = mysqli_query($conn, "UPDATE tbl_users SET lvl = '$role' WHERE oauth_id = '$g_id'");
             }
             if ($row['file'] == null) {
-                $query_update_porfile = mysqli_query($conn, "UPDATE tbl_users SET file = '$g_profile_picture_url' WHERE oauth_id = '$g_id'");
+                $query_update_porfile = mysqli_query($conn, "UPDATE tbl_users SET foto = '$g_profile_picture_url' WHERE oauth_id = '$g_id'");
             }
             if ($row['full_name'] == $g_name || $row['email'] == $g_email) {
                 $query_update = mysqli_prepare($conn, "UPDATE tbl_users SET full_name=?, email=?, last_login=NOW() WHERE oauth_id=?");

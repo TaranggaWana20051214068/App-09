@@ -18,7 +18,9 @@
     //         swal("Deleted !!", "Hey, your imaginary file has been deleted !!", "success")
     //     })
     // }
+
 </script>
+<script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 <script src="plugins/common/common.min.js"></script>
 <script src="js/custom.min.js"></script>
 <script src="js/settings.js"></script>
@@ -26,6 +28,7 @@
 <script src="js/styleSwitcher.js"></script>
 <script src="./plugins/moment/moment.js"></script>
 
+<!-- sweetalert -->
 <!-- form step -->
 <script src="./plugins/jquery-steps/build/jquery.steps.min.js"></script>
 <script src="./plugins/jquery-validation/jquery.validate.min.js"></script>
