@@ -7,3 +7,4 @@ $conn = new mysqli($host, $username, $password, $database);
 if (!$conn . mysqli_connect_errno()) {
   die("Connection failed: " . mysqli_connect_error());
 }
+$ketua_rt = "Imam Bukhori";

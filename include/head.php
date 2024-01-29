@@ -9,21 +9,24 @@ $conn = new mysqli($host, $username, $password, $database);
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>RT-09</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logo-dki-512.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./asset/images/logo-dki-512.png">
     <!-- Custom Stylesheet -->
+    <script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/style2.css" rel="stylesheet">
+    <link href="./asset/css/style.css" rel="stylesheet">
+    <link href="./asset/css/style2.css" rel="stylesheet">
     <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
-    <link href="./plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
-    <link href="./plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link href="./plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+    <link href="./asset/plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
+    <link href="./asset/plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="./asset/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css"
+        rel="stylesheet">
 
+    <link href="./asset/plugins/clockpicker/dist/jquery-clockpicker.min.css" rel="stylesheet">
     <!-- Color picker plugins css -->
-    <link href="./plugins/jquery-asColorPicker-master/css/asColorPicker.css" rel="stylesheet">
+    <link href="./asset/plugins/jquery-asColorPicker-master/css/asColorPicker.css" rel="stylesheet">
     <!-- Date picker plugins css -->
-    <link href="./plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="./asset/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
     <!-- Daterange picker plugins css -->
 
-    <link href="./plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="./asset/plugins/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 </head>

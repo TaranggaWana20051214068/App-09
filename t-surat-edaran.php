@@ -1,10 +1,10 @@
 <?php
 
-$judul = 'Tambah Surat Rapat';
+$judul = 'Tambah Surat Edaran';
 
 
 // Mengambil data nomor surat terakhir
-$sql = mysqli_query($conn, "SELECT kode, tanggal FROM tbl_s_rapat ORDER BY id DESC LIMIT 1");
+$sql = mysqli_query($conn, "SELECT kode, tanggal FROM tbl_s_edar ORDER BY id DESC LIMIT 1");
 $result = mysqli_fetch_assoc($sql);
 
 if (mysqli_num_rows($sql) > 0) {
@@ -15,7 +15,7 @@ if (mysqli_num_rows($sql) > 0) {
     // Periksa apakah input terakhir pada tahun yang sama
     ($tahun_sekarang == $tahun_terakhir) ? $kode = $result['kode'] + 1 : $kode = 1;
 } else {
-    $sql = mysqli_query($conn, "SELECT nomor_surat FROM tbl_s_rapat");
+    $sql = mysqli_query($conn, "SELECT nomor_surat FROM tbl_s_edar");
     ($result = mysqli_num_rows($sql)) != 0 ? $kode = $result + 1 : $kode = 1;
 }
 
@@ -125,10 +125,10 @@ $bikin_kode = "$x/RT009/$tahun";
         const waktu = document.querySelector('#end').value;
         const tmpt = document.querySelector('#tmpt').value;
         const acara = document.querySelector('#comment').value;
-        const tbl = 'tbl_s_rapat';
+        const tbl = 'tbl_s_edar';
         const kolom = 'nomor_surat, kode, perihal, tanggal, waktu_s, tmpt, acara, id_surat';
         const user = '<?= $_SESSION['uname'] ?>';
-        const keperluan = 'rapat';
+        const keperluan = 'edaran';
         const kolomSurat = 'tgl_surat, pemohon, keperluan';
         if (tbl) {
             const data = [
@@ -160,7 +160,7 @@ $bikin_kode = "$x/RT009/$tahun";
                                     text: "Anda Berhasil Mengubah Data.",
                                     icon: "success"
                                 }).then(() => {
-                                    window.location.href = '?sur=rapat';
+                                    window.location.href = '?sur=edaran';
                                 });
                             } else {
                                 Swal.fire({
@@ -168,7 +168,7 @@ $bikin_kode = "$x/RT009/$tahun";
                                     title: "Maaf...",
                                     text: "Terjadi Kesalahan. Silakan Coba Lagi!"
                                 }).then(() => {
-                                    window.location.href = '?sur=rapat&page=add';
+                                    window.location.href = '?sur=edaran&page=add';
                                 });
                             }
                         } catch (error) {

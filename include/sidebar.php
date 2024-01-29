@@ -8,9 +8,9 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="?sur=rapat">Surat Rapat</a></li>
+                    <li><a href="?sur=edaran">Surat Edaran</a></li>
                 </ul>
             </li>
-
         </ul>
     </div>
 </div>

@@ -37,15 +37,13 @@ function tanggalWaktu($date)
 {
     // Explode tanggal dan waktu langsung pada $date
     list($tanggal2, $waktu) = explode(' - ', $date);
+    $tanggal_obj = DateTime::createFromFormat("l j F Y - H:i", $date);
+    $hari = $tanggal_obj->format("l");
+    $tanggal = $tanggal_obj->format("j");
+    $bulan = $tanggal_obj->format("F");
+    $tahun = $tanggal_obj->format("Y");
+    $waktu = $tanggal_obj->format("H:i");
 
-    // Explode tanggal ke dalam array
-    $indoDate = explode(" ", substr($tanggal2, 0, 25));
-
-    // Pastikan indeks 0, 1, 2, dan 3 ada sebelum diakses
-    $hari = isset($indoDate[0]) ? ubahHari($indoDate[0]) : '';
-    $tanggal = isset($indoDate[1]) ? $indoDate[1] : '';
-    $bulan = isset($indoDate[2]) ? $indoDate[2] : '';
-    $tahun = isset($indoDate[3]) ? $indoDate[3] : '';
     $bulan = str_replace(
         ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
@@ -53,10 +51,10 @@ function tanggalWaktu($date)
     );
     // Ubah hari ke dalam bahasa Indonesia
     $tanggal1 = $hari . ', ' . $tanggal . ' ' . $bulan . ' ' . $tahun;
-
+    $tanggal2 = $tanggal . ' ' . $bulan . ' ' . $tahun;
     // Ubah bulan ke dalam bahasa Indonesia
 
 
-    return ['tanggal' => $tanggal1, 'waktu' => $waktu];
+    return ['hari-tanggal' => $tanggal1, 'waktu' => $waktu, 'tanggal' => $tanggal2, 'bulan' => $bulan];
 }
 

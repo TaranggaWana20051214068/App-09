@@ -5,9 +5,9 @@ if (!isset($_SESSION['login'])) {
     die();
 }
 $actArray = [
-    'add' => 't-surat-rapat.php',
-    'edit' => 'edit-surat-rapat.php',
-    'surat' => 'cetak-surat-rapat.php'
+    'add' => 't-surat-edaran.php',
+    'edit' => 'edit-surat.php',
+    'surat' => 'cetak-surat-edaran.php'
 
 ];
 if (isset($_REQUEST['page'])) {
@@ -54,7 +54,7 @@ successMessage.style.display = "none";
     if (isset($_REQUEST['delet'])) {
         $id = $_POST['id'];
 
-        $sql = mysqli_query($conn, "DELETE a, b FROM tbl_surat a LEFT JOIN tbl_s_rapat b ON a.id = b.id_surat WHERE a.id = '$id'");
+        $sql = mysqli_query($conn, "DELETE a, b FROM tbl_surat a LEFT JOIN tbl_s_edar b ON a.id = b.id_surat WHERE a.id = '$id'");
 
         if ($sql === false) {
             echo '<div class="alert alert-warning">Gagal Menghapus Data!</div>';
@@ -64,7 +64,7 @@ successMessage.style.display = "none";
             echo '<div class="alert alert-info">Data berhasil dihapus!</div>';
             $_SESSION['hapus'] = "Data berhasil diahapus";
             ?>
-            <script>window.location.href = "?sur=rapat";</script>
+            <script>window.location.href = "?sur=edaran";</script>
             <?php
             exit(); // Opsional: Menghentikan eksekusi script setelah menampilkan pesan sukses
         }
@@ -98,7 +98,7 @@ successMessage.style.display = "none";
                         <div class="card-body">
                             <h4 class="card-title">Data Surat
                             </h4>
-                            <button type="button" onclick="window.location.href='?sur=rapat&page=add'"
+                            <button type="button" onclick="window.location.href='?sur=edaran&page=add'"
                                 class="btn btn-rounded mb-1 btn-outline-info">Tambah
                                 Data <span class="btn-icon-right"><i class="fa fa-plus color-info"></i></span>
                             </button>
@@ -115,16 +115,18 @@ successMessage.style.display = "none";
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $query_surat = mysqli_query($conn, 'SELECT * FROM tbl_s_rapat ORDER BY id DESC');
+                                        $query_surat = mysqli_query($conn, 'SELECT * FROM tbl_s_edar ORDER BY id DESC');
                                         if (mysqli_num_rows($query_surat) > 0) {
                                             $no = 1;
                                             $hasil = 0;
                                             while ($row_surat = mysqli_fetch_array($query_surat)) {
                                                 $id_surat = $row_surat["id"];
                                                 // Tampilkan data surat dan jumlah barang
-                                                $date = tanggalWaktu($row_surat['tanggal']);
-                                                $q_waktu = DateTime::createFromFormat("H:i:s", $row_surat['waktu_s']);
-                                                $waktu = $q_waktu->format('H:i');
+                                                if ($row_surat['tanggal']) {
+                                                    $date = tanggalWaktu($row_surat['tanggal']);
+                                                    $q_waktu = DateTime::createFromFormat("H:i:s", $row_surat['waktu_s']);
+                                                    $waktu = $q_waktu->format('H:i');
+                                                }
                                                 ?>
                                                 <tr>
                                                     <td>
@@ -134,18 +136,19 @@ successMessage.style.display = "none";
                                                         <?= $row_surat['perihal'] ?>
                                                     </td>
                                                     <td>
-                                                        <?= $date['tanggal'] ?>
+                                                        <?= ($row_surat['tanggal']) ? $date['tanggal'] : '-'; ?>
                                                     </td>
                                                     <td>
-                                                        <?= $date['waktu'] . ' - ' . $waktu ?>
+                                                        <?= $row_surat['waktu_s'] ?>
                                                     </td>
                                                     <td>
                                                         <div class="btn-group mb-2 btn-group-sm">
                                                             <button type="button"
-                                                                onclick="window.open('./cetak-surat-rapat.php?id=<?= $id_surat ?>', '_blank')"
+                                                                onclick="window.open('./cetak-surat-edaran.php?id=<?= $id_surat ?>', '_blank')"
                                                                 class="btn btn-xs btn-info">Cetak</button>
-                                                            <button type="button" class="btn btn-xs btn-primary"
-                                                                onclick="window.location.href='?sur=rapat&page=edit&id=<?= $id_surat ?>'">Edit</button>
+                                                            <button type="button"
+                                                                onclick="window.location.href='?sur=edaran&page=edit&id=<?= $id_surat ?>'"
+                                                                class="btn btn-xs btn-primary">Edit</button>
                                                             <button type="button" class="btn btn-xs btn-danger" data-toggle="modal"
                                                                 data-target="#basicModal<?= $id_surat ?>">Hapus</button>
                                                         </div>
@@ -185,7 +188,7 @@ successMessage.style.display = "none";
                                         } else { ?>
                                             <div class="alert alert-primary">Tidak ada data ditemukan silahkan Tambah
                                                 Data
-                                                <a href="?sur=rapat&page=add" class="alert-link">Click Disini</a>
+                                                <a href="?sur=edaran&page=add" class="alert-link">Click Disini</a>
                                             </div>
                                         <?php } ?>
                                     </tbody>
@@ -198,27 +201,15 @@ successMessage.style.display = "none";
         </div>
         <script>
             const succPesan = sessionStorage.getItem('succ');
-            const errPesan = sessionStorage.getItem('err');
             if (succPesan) {
                 Swal.fire({
                     icon: "success",
                     title: succPesan,
-                    text: "Berhasil menambahkan Data!",
                     showConfirmButton: false,
                     timer: 1500
                 });
-                sessionStorage.removeItem('succ');
             }
-            if (errPesan) {
-                Swal.fire({
-                    icon: "error",
-                    title: errPesan,
-                    text: "Terjadi Kesalahan Silakan Coba Lagi!",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                sessionStorage.removeItem('err');
-            }
+            sessionStorage.removeItem('succ');
         </script>
         <?php
     } else {
@@ -227,7 +218,7 @@ successMessage.style.display = "none";
             Swal.fire({
                 title: 'Form Data Diri',
                 html: `<input type="number" id="telp" class="swal2-input" placeholder="Nomor Telepon">
-                                                                                                                       <input type="text" id="alamat" class="swal2-input" placeholder="Alamat">`,
+                                                                                                                                                       <input type="text" id="alamat" class="swal2-input" placeholder="Alamat">`,
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 confirmButtonText: 'Kirim',

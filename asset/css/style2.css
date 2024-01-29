@@ -1,8 +1,19 @@
+.divider {
+  display: block;
+  height: 1px;
+  border: 0.5px solid #4e4e4e;
+}
 .logo-compact img {
   width: 100%;
   aspect-ratio: 3/2;
   object-fit: contain;
   margin-top: -15px;
+}
+.ttd img {
+  width: 150px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  margin: 0;
 }
 .logo-abbr img {
   width: 200px;
@@ -97,9 +108,9 @@
   align-items: center;
   justify-content: center;
   padding: 0 2px;
+  text-align: center;
   font-size: large;
   font-weight: 600;
-  border: 1px solid #ccc;
 }
 
 .div-3 {

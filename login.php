@@ -34,7 +34,7 @@ if (isset($_GET['code'])) {
         $g_id = $profile['id'];
         $g_profile_picture_url = $profile['picture'];
         $role = 101;
-        $query_check = mysqli_prepare($conn, "SELECT full_name,email,oauth_id,lvl FROM tbl_users WHERE oauth_id = ?");
+        $query_check = mysqli_prepare($conn, "SELECT * FROM tbl_users WHERE oauth_id = ?");
         mysqli_stmt_bind_param($query_check, 's', $g_id);
         mysqli_stmt_execute($query_check);
         $result_check = mysqli_stmt_get_result($query_check);
@@ -58,6 +58,7 @@ if (isset($_GET['code'])) {
             if ($query_update === false) {
                 die('Update Error: ' . mysqli_error($conn));
             }
+            $id = $row['user_id'];
         } else {
             $query_insert = mysqli_prepare($conn, "INSERT INTO tbl_users (full_name, email, oauth_id, foto, lvl) VALUES (?, ?, ?, ?, ?)");
             mysqli_stmt_bind_param($query_insert, 'ssssi', $g_name, $g_email, $g_id, $g_profile_picture_url, $role);
@@ -65,13 +66,14 @@ if (isset($_GET['code'])) {
             if ($query_insert === false) {
                 die('Insert Error: ' . mysqli_error($conn));
             }
+            $id = $conn->insert_id;
         }
         if ($query_check === false) {
             die('Query Error: ' . mysqli_error($conn));
         }
 
-
         $_SESSION['login'] = true;
+        $_SESSION['user_id'] = $id;
         $_SESSION['access_token'] = $token['access_token'];
         $_SESSION['uname'] = $g_name;
         $_SESSION['email'] = $g_email;
@@ -89,11 +91,11 @@ if (isset($_GET['code'])) {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quixlab - Bootstrap Admin Dashboard Template by Themefisher.com</title>
+    <title>Login</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="asset/image/logo-dki-192.png">
     <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
     <style>
         .gsi-material-button {
             -moz-user-select: none;
@@ -294,11 +296,11 @@ if (isset($_GET['code'])) {
             var successMessage = document.getElementById("hapus");
             successMessage.style.display = "none";
         }, 5000); // 3000 milidetik atau 3 detik</script>
-    <script src="plugins/common/common.min.js"></script>
-    <script src="js/custom.min.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/gleek.js"></script>
-    <script src="js/styleSwitcher.js"></script>
+    <script src="asset/plugins/common/common.min.js"></script>
+    <script src="asset/js/custom.min.js"></script>
+    <script src="asset/js/settings.js"></script>
+    <script src="asset/js/gleek.js"></script>
+    <script src="asset/js/styleSwitcher.js"></script>
 </body>
 
 </html>

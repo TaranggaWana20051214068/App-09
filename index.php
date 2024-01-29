@@ -65,7 +65,9 @@ if (!isset($_SESSION['login'])) {
 
             $judul = "Halaman Utama";
             $actArray = [
-                'rapat' => 'dasboard-surat-rapat.php'
+                'rapat' => 'dasboard-surat-rapat.php',
+                'pro' => 'profile.php',
+                'edaran' => 'dashboard-surat-edara.php',
 
             ];
             if (isset($_REQUEST['sur'])) {
@@ -110,7 +112,8 @@ if (!isset($_SESSION['login'])) {
                                                 <span class="caret m-l-5"></span>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a href="?sur=rapat" class="dropdown-item">Surat</a>
+                                                <a href="?sur=rapat" class="dropdown-item">Surat Rapat</a>
+                                                <a href="?sur=edaran" class="dropdown-item">Surat Edaran</a>
                                             </div>
                                         </div>
                                         <div class="mail-list mt-4"><a href="email-inbox.html"
@@ -142,7 +145,6 @@ if (!isset($_SESSION['login'])) {
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>No.Surat</th>
                                                         <th>Pemohon</th>
                                                         <th>Tanggal</th>
                                                         <th>Alamat</th>
@@ -168,9 +170,6 @@ if (!isset($_SESSION['login'])) {
                                                                     <?= $no ?>
                                                                 </th>
                                                                 <td>
-                                                                    <?= $row['nomer_surat'] ?>
-                                                                </td>
-                                                                <td>
                                                                     <?= $row['pemohon'] ?>
                                                                 </td>
                                                                 <td>
@@ -183,20 +182,23 @@ if (!isset($_SESSION['login'])) {
                                                                     <?= ($row['status']) ? '<i class="fa fa-circle-o text-success  mr-2"></i>' . $row['status'] : '<i class="fa fa-circle-o text-warning left  mr-2"> pending</i>'; ?>
                                                                 </td>
                                                                 <td>
+                                                                    Surat
                                                                     <?= $row['keperluan'] ?>
                                                                 </td>
                                                                 <td>
                                                                     <?php
+                                                                    $user_id = $_SESSION['user_id'];
                                                                     if (is_null($row['acc'])) {
                                                                         ?>
                                                                         <button type="button"
-                                                                            onclick="sweetAcc(<?php echo $row['id']; ?>)"
+                                                                            onclick="sweetAcc(<?= $row['id'] . ',' . $user_id ?>)"
                                                                             class="btn mb-1 btn-sm btn-warning text-white">ACC</button>
                                                                         <?php
                                                                     } else {
                                                                         ?>
-                                                                        <a href="?sur=cetak"
-                                                                            class="btn btn-sm btn-info btn-block">Cetak</a>
+                                                                        <button type="button"
+                                                                            onclick="ctk('<?= $row['keperluan'] ?>', '<?= $row['id'] ?>');"
+                                                                            class="btn btn-sm btn-info btn-block">Cetak</button>
                                                                         <?php
                                                                     }
                                                                     ?>
@@ -223,7 +225,11 @@ if (!isset($_SESSION['login'])) {
                         </div>
                     </div>
                     <script>
-                        function sweetAcc(id) {
+
+                        function ctk(keperluan, id) {
+                            window.location.href = 'cetak-surat-' + keperluan + '.php?id=' + id;
+                        }
+                        function sweetAcc(id, user_id) {
                             Swal.fire({
                                 title: "Apakah Anda yakin?",
                                 text: "Menyetujui ini!",
@@ -253,12 +259,15 @@ if (!isset($_SESSION['login'])) {
                                                     icon: "error",
                                                     title: "Maaf...",
                                                     text: "Terjadi Kesalahan Silakan Coba Lagi!"
-                                                });
+                                                }).then(() => {
+                                                    // Ganti window.lication menjadi window.location
+                                                    window.location.href = '?';
+                                                });;
                                             }
                                         }
                                     };
 
-                                    xhttp.open("GET", "approve_surat.php?id=" + id, true);
+                                    xhttp.open("GET", "proses_data.php?ket=approve&id=" + id + "&user_id=" + user_id, true);
                                     xhttp.send();
 
                                 }
