@@ -1,3 +1,28 @@
+.popup {
+  position: absolute !important;
+  top: 20% !important;
+  right: 0 !important;
+  left: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto;
+  z-index: 999;
+  visibility: hidden;
+  /* Tambahkan properti transform untuk menggeser elemen ke tengah */
+}
+
+.popup-content {
+  background-color: ghostwhite;
+  padding: 40px;
+  color: #000000;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.popup-content a {
+  cursor: pointer;
+  margin: 5px;
+  color: white;
+}
 .divider {
   display: block;
   height: 1px;

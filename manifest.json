@@ -1,0 +1,27 @@
+{
+  "name": "RT-09-v1",
+  "short_name": "RT-09",
+  "description": "App-RT-09",
+  "icons": [
+    {
+      "src": "asset/images/logo-dki-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "asset/images/logo-dki-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "display": "fullscreen",
+  "orientation": "any",
+  "start_url": ".",
+  "url": "index.php",
+  "scope": ".",
+  "lang": "fa-IR",
+  "dir": "rtl"
+}

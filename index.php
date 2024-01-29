@@ -88,6 +88,17 @@ if (!isset($_SESSION['login'])) {
                 }
             } else {
                 ?>
+                <div id="popup" class="popup col-md-6 col-lg-3">
+                    <div class="popup-content card text-center">
+                        <div class="card-body">
+                            <!-- Konten pop-up -->
+                            <h4 class="card-title">RT-09</h4>
+                            <p class="card-text">Install RT-09 App?</p>
+                            <a id="kon-popup" class="btn btn-sm btn-info btn-rounded">Install</a>
+                            <a id="close-popup" class="btn btn-sm btn-danger btn-rounded">TIDAK</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="row page-titles mx-0">
                     <div class="col p-md-0">
                         <ol class="breadcrumb">
@@ -224,6 +235,61 @@ if (!isset($_SESSION['login'])) {
                             </div>
                         </div>
                     </div>
+                    <script>
+                        // Check if the 'prompt' method is available
+                        if ('prompt' in window) {
+                            // The 'prompt' method is available, which means it's a PWA
+                            // Check if the PWA is already installed
+                            window.addEventListener('beforeinstallprompt', (e) => {
+                                e.preventDefault(); // Prevent the default browser prompt
+                                const installPrompt = e;
+                                const popup = document.getElementById('popup');
+                                const closeBtn = document.getElementById('close-popup');
+                                const konBtn = document.getElementById('kon-popup');
+
+                                // Fungsi untuk menampilkan pop-up
+                                function showPopup() {
+                                    popup.style.visibility = 'visible';
+                                }
+
+                                // Fungsi untuk menyembunyikan pop-up
+                                function hidePopup() {
+                                    popup.style.visibility = 'hidden';
+                                }
+
+                                function hidePopupKon() {
+                                    popup.style.visibility = 'hidden';
+                                    installPrompt.prompt();
+                                }
+
+                                // Tambahkan event listener untuk tombol konfirm
+                                konBtn.addEventListener('click', hidePopupKon);
+
+                                // Tambahkan event listener untuk tombol tutup
+                                closeBtn.addEventListener('click', hidePopup);
+
+                                // Tambahkan timer untuk menutup pop-up secara otomatis setelah 5 detik
+                                setTimeout(() => {
+                                    hidePopup();
+                                }, 5000);
+
+                                // You can now display your own custom installation popup
+                                showPopup();
+
+                                // Handle the installation process if the user chooses to install
+                                installPrompt.userChoice
+                                    .then((choiceResult) => {
+                                        if (choiceResult.outcome === 'accepted') {
+                                            // The user has accepted the installation
+                                            // You can perform further actions if needed
+                                        }
+                                    });
+                            });
+                        } else {
+                            // 'prompt' method is not available, indicating it's not a PWA
+                            // You can take other actions or show a different UI
+                        }
+                    </script>
                     <script>
 
                         function ctk(keperluan, id) {

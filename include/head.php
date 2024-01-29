@@ -15,6 +15,8 @@ $conn = new mysqli($host, $username, $password, $database);
 
     <link href="./asset/css/style.css" rel="stylesheet">
     <link href="./asset/css/style2.css" rel="stylesheet">
+    <link rel="manifest" href="./manifest.json">
+    <script type='text/javascript' src="asset/js/main.js"></script>
     <link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
     <link href="./asset/plugins/jquery-steps/css/jquery.steps.css" rel="stylesheet">
     <link href="./asset/plugins/tables/css/datatable/dataTables.bootstrap4.min.css" rel="stylesheet">
